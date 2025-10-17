@@ -1,0 +1,14 @@
+{
+  "name": "spa-final-project",
+  "version": "1.0.0",
+  "description": "SPA project deployment",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
