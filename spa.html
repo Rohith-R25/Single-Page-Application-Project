@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Single Page Application Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0; padding: 0;
+      background: linear-gradient(120deg, #232946, #090f2b 120%);
+      font-family: 'Montserrat', Arial, sans-serif;
+      color: #eceefd;
+      min-height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 190px;
+      background: #20223c;
+      border-top-right-radius: 17px;
+      border-bottom-right-radius: 17px;
+      box-shadow: 2px 0 14px #0d154066;
+      padding-top: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+    .sidebar h2 {
+      font-size: 1.49rem;
+      line-height: 1.18;
+      font-weight: 900;
+      margin-left: 17px;
+      margin-bottom: 1.5rem;
+      color: #f0f4ff;
+      letter-spacing: 1px;
+      white-space: normal;
+      word-break: break-word;
+      text-align: left;
+    }
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-left: 11px;
+      margin-top: 2px;
+      width: 100%;
+    }
+    .sidebar nav a {
+      font-size: 1.02em;
+      font-weight: 600;
+      color: #b6bed8;
+      text-decoration: none;
+      border-radius: 6px;
+      padding: 9px 0 9px 8px;
+      transition: background 0.16s;
+      cursor: pointer;
+      width: 92%;
+      user-select: none;
+      display: block;
+      white-space:nowrap;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: #343870;
+      color: #fff;
+      box-shadow: 0 1px 11px #6a46a570;
+    }
+    .main {
+      flex: 1;
+      padding: 43px 13px 29px 13px;
+      min-height: 100vh;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .title {
+      font-weight: 900;
+      font-size: 2.12rem;
+      letter-spacing: 2.5px;
+      color: #89c6ff;
+      text-align: center;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+    .subtitle {
+      font-size: 1.08em;
+      color: #8aa7e3;
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 34px;
+    }
+    .desc {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 21px auto;
+      font-size: 1.11em;
+      color: #b7bed6;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 17px;
+    }
+    .badge {
+      background: #343870;
+      color: #c6d8fa;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 1em;
+      font-weight: bold;
+      border: none;
+      margin-bottom: 6px;
+      transition: background 0.18s, color 0.18s;
+      cursor: pointer;
+    }
+    .badge:hover {
+      background: #7e97d1;
+      color: #20223c;
+    }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      margin-top: 15px;
+      margin-bottom: 3px;
+    }
+    .card {
+      background: #20223c;
+      border-radius: 12px;
+      box-shadow: 0 8px 22px #191030e3;
+      padding: 18px 11px 12px 11px;
+      width: 260px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3px;
+    }
+    .card-title {
+      font-size: 1.08em;
+      font-weight: 900;
+      margin-bottom: 11px;
+      color: #89c6ff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 9px #95c5fc33;
+    }
+    .card-desc {
+      font-size: 0.97em;
+      color: #bfc9ed;
+      margin-bottom: 14px;
+    }
+    .card-btn {
+      background: linear-gradient(90deg,#5c90f1,#8f66ff 75%);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 16px;
+      font-weight: 900;
+      font-size: 0.98em;
+      box-shadow: 0 3px 10px #5c90f17f;
+      cursor: pointer;
+      transition: background 0.17s;
+      margin-top: 2px;
+    }
+    .card-btn:hover { background: linear-gradient(90deg,#66aaff,#b649fe); }
+    #details-section {
+      margin: 24px auto 0 auto;
+      padding: 20px 14px;
+      max-width: 880px;
+      background: #191c3a;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px #1910309a;
+      font-size: 1.08em;
+      color: #e3ebfe;
+      display: none;
+    }
+    #details-section.active { display:block; }
+    #details-section h3 { color:#89c6ff;margin-bottom:0.6em;}
+    .loading { color: #53a7fe; font-size: 1.05em; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>SPA Dashboard</h2>
+    <nav>
+      <a href="#" class="active" onclick="showSection('home', this)">Home</a>
+      <a href="#" onclick="showSection('architecture-flow', this)">Architecture</a>
+      <a href="#" onclick="showSection('features-benefits', this)">Features</a>
+      <a href="#" onclick="showSection('usecases', this)">Use Cases</a>
+      <a href="#" onclick="showSection('best-practices', this)">Best Practices</a>
+      <a href="#" onclick="showSection('code', this)">Sample Code</a>
+    </nav>
+  </div>
+  <div class="main">
+    <div class="title">Single Page Application</div>
+    <div class="subtitle">Modern SPA Project | Features | Architecture | Codebase</div>
+    <div class="desc">
+      Build powerful, responsive web projects using Single Page Application architecture and the most essential development tools.
+    </div>
+    <div class="badges" id="badges"></div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-title">What is a SPA?</div>
+        <div class="card-desc">
+          SPAs load one HTML shell and update only required content, leveraging leading frontend technologies and JavaScript frameworks.
+        </div>
+        <button class="card-btn" onclick="loadDetails('what-is-spa')">Learn More</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Architecture & Flow</div>
+        <div class="card-desc">
+          Dynamic client-side routing, modular APIs, and efficient UI make SPAs scalable and high-performing.
+        </div>
+        <button class="card-btn" onclick="loadDetails('architecture-flow')">View Details</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Features & Benefits</div>
+        <div class="card-desc">
+          - Instant navigation<br>
+          - Real-time updates<br>
+          - Responsive/adaptive UI
+        </div>
+        <button class="card-btn" onclick="loadDetails('features-benefits')">Explore</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Best Practices</div>
+        <div class="card-desc">
+          - Robust API design<br>
+          - Security & a11y<br>
+          - Performance optimization
+        </div>
+        <button class="card-btn" onclick="loadDetails('best-practices')">Read More</button>
+      </div>
+    </div>
+    <div id="details-section"></div>
+  </div>
+  <script>
+    function setActiveSidebar(el){
+      let navLinks = document.querySelectorAll('.sidebar nav a');
+      navLinks.forEach(a => a.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('details-section').style.display = 'none';
+    }
+    function showSection(section, el) {
+      setActiveSidebar(el);
+      if(section === 'home') {
+        document.getElementById('details-section').style.display = 'none';
+      } else {
+        loadDetails(section);
+      }
+    }
+    async function loadDetails(section) {
+      const detailsDiv = document.getElementById("details-section");
+      detailsDiv.className = "active";
+      detailsDiv.innerHTML = `<span class="loading">Loading...</span>`;
+      try {
+        const res = await fetch('/api/' + section);
+        if (!res.ok) throw new Error("Network error");
+        const data = await res.json();
+        detailsDiv.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      } catch (e) {
+        detailsDiv.innerHTML = `<span style="color:#f55757;">Failed to load content.</span>`;
+      }
+      detailsDiv.style.display = 'block';
+      window.scrollTo({ top: detailsDiv.offsetTop, behavior: 'smooth' });
+    }
+    async function loadBadges() {
+      const res = await fetch('/api/tools');
+      const data = await res.json();
+      const badgesDiv = document.getElementById('badges');
+      data.tools.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'badge';
+        btn.textContent = t.name;
+        btn.onclick = () => window.open(t.url, "_blank");
+        badgesDiv.appendChild(btn);
+      });
+    }
+    window.onload = () => { loadBadges(); };
+  </script>
+</body>
+</html>
